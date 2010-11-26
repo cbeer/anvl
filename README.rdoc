@@ -1,6 +1,6 @@
 = anvl
 
-Description goes here.
+Ruby implementation of A Name-Value Language (ANVL)
 
 == Contributing to anvl
  

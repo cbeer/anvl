@@ -15,8 +15,7 @@ Jeweler::Tasks.new do |gem|
   gem.name = "anvl"
   gem.homepage = "http://github.com/cbeer/anvl"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Ruby implementation of A Name-Value Language (ANVL)}
   gem.email = "chris@cbeer.info"
   gem.authors = ["Chris Beer"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
