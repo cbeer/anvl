@@ -24,6 +24,13 @@ when/created: 1888'
     assert_equal("1888", h[:"when/created"])
   end
 
+  def test_multiple_values
+    h = ANVL::Document.parse 'entry:
+a: 1
+a: 2'
+    assert_equal({:a => ["1","2"], :entry => ""}, h.to_h)
+  end
+
   def test_key_access
     h = ANVL::Document.new
     assert_equal([], h[:a])
@@ -46,6 +53,8 @@ when/created: 1888'
 
     h << { :c => 2 }
     assert_equal([1, 2], h[:c])
+
+    assert_equal("a: a\na: b\na: c\na: d\nc: 1\nc: 2", h.to_s)
   end
 
   def test_fmt_empty
