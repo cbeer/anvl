@@ -24,6 +24,30 @@ when/created: 1888'
     assert_equal("1888", h[:"when/created"])
   end
 
+  def test_key_access
+    h = ANVL::Document.new
+    assert_equal([], h[:a])
+    h[:a] = 'a'
+    assert_equal({:a => 'a' }, h.to_h)
+    h[:a] = ['a', 'b']
+    assert_equal({:a => ['a', 'b'] }, h.to_h)
+    h[:a] << 'c'
+    assert_equal({:a => ['a', 'b', 'c'] }, h.to_h)
+    assert_equal(['a', 'b', 'c'], h[:a])
+
+    h[:b]
+    assert_equal({:a => ['a', 'b', 'c'] }, h.to_h)
+
+    h << { :a => 'd' }
+    assert_equal({:a => ['a', 'b', 'c', 'd'] }, h.to_h)
+
+    h << { :c => 1 }
+    assert_equal(1, h[:c])
+
+    h << { :c => 2 }
+    assert_equal([1, 2], h[:c])
+  end
+
   def test_fmt_empty
     str = ANVL.to_anvl({})
     assert_equal('', str)

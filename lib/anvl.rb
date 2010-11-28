@@ -9,7 +9,7 @@ module ANVL
     attr_reader :entries
 
     def initialize obj = nil
-      @entries = {}
+      @entries = Hash.new { |h,k| h[k] = [] }
 
       case obj
         when Hash
@@ -30,19 +30,14 @@ module ANVL
 
       end if obj
 
-      @entries.public_methods(false).each do |meth|
-        (class << self; self; end).class_eval do
-          define_method meth do |*args|
-            @entries.send meth, *args
-	  end unless self.respond_to? meth
-	end
-      end
+      add_entries_methods
 
-      cleanup_entries
+      gc!
     end
 
     def to_s
-      @entries.reject { |key, value| value.nil? }.map do |key, value|
+      gc!
+      @entries.map do |key, value|
         if value.is_a? Array
           value.map do |v|
             "#{key}: #{v}"
@@ -53,18 +48,23 @@ module ANVL
       end.join "\n"
     end
 
+    def to_h
+      gc!
+      @entries
+    end
+
     def [] key
-      @entries[key] ||= []
       return @entries[key]
     end
 
     def []= key, value
+      value = [value] unless value.is_a? Array
       @entries[key] = value
     end
 
     def push hash
       hash.each do |key, value|
-        @entries[key] ||= []
+        @entries[key] = [@entries[key]] unless @entries[key].is_a? Array
 	if value.is_a? Array
 	  value.each do |v|      
 	    @entries[key] << v
@@ -73,6 +73,7 @@ module ANVL
           @entries[key] << value
 	end
       end
+      gc!
       @entries
     end
     alias_method :'<<', :push
@@ -85,13 +86,24 @@ module ANVL
 
     def parse_entry str, line=0
       key, value = str.split ":", 2
-      @entries[key.to_sym] ||= []
       @entries[key.to_sym] << value.strip
     end
 
-    def cleanup_entries
+    def add_entries_methods
+      @entries.public_methods(false).reject { |x| self.respond_to? x }.each do |meth|
+        (class << self; self; end).class_eval do
+          define_method meth do |*args|
+            @entries.send meth, *args
+	  end 
+	end
+      end
+    end  
+
+    def gc!
+      @entries.delete_if { |key, value| value.nil? or (value.is_a? Array and value.empty?) }
+
       @entries.each do |key, value|
-        @entries[key] = value.first if value.length == 1
+        @entries[key] = value.first if value.is_a? Array and value.length == 1
       end
     end
   end
