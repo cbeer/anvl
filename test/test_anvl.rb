@@ -3,12 +3,12 @@ require 'helper'
 class TestAnvl < Test::Unit::TestCase
   def test_parse_empty
     h = ANVL.parse ''
-    assert_equal(h, {})
+    assert_equal(h.entries.length, 0)
   end
 
   def test_parse_comment
     h = ANVL.parse '#'
-    assert_equal(h, {})
+    assert_equal(h.entries.length, 0)
   end
 
   def test_first_draft
