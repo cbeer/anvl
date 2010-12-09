@@ -22,9 +22,11 @@ module ANVL
 	  lines.each_with_index do |str, i|
 	    case str
 	      when /^#/
-                parse_comment str, i
-	      else  
-                parse_entry str, i
+          parse_comment str, i
+        when /:/  
+          parse_entry str, i
+	      else  # something is wrong..
+          nil
 	    end  
 	  end  
 
@@ -40,10 +42,10 @@ module ANVL
       @entries.map do |key, value|
         if value.is_a? Array
           value.map do |v|
-            "#{key}: #{v}"
+            "#{key}: #{v.to_s.gsub(/\n/, "\n    ")}"
           end
         else
-          "#{key}: #{value}" 
+          "#{key}: #{value.to_s.gsub(/\n/, "\n    ")}" 
         end
       end.join "\n"
     end

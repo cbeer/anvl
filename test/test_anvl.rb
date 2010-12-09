@@ -54,7 +54,19 @@ a: 2'
     h << { :c => 2 }
     assert_equal([1, 2], h[:c])
 
-    assert_equal("a: a\na: b\na: c\na: d\nc: 1\nc: 2", h.to_s)
+    str = h.to_s
+    assert_match(/^a: a$/, str)
+    assert_match(/^a: b$/, str)
+    assert_match(/^a: c$/, str)
+    assert_match(/^a: d$/, str)
+    assert_match(/^c: 1$/, str)
+    assert_match(/^c: 2$/, str)
+  end
+
+  def test_newlines
+    h = ANVL::Document.new
+    h[:nl] = "abc\n123"
+    assert_equal("nl: abc\n    123", h.to_s)
   end
 
   def test_fmt_empty
