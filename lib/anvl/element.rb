@@ -5,7 +5,7 @@ module ANVL
       @document = args[:document]
       @display_label = args[:display_label] || convert_label(args[:label])
       @label = convert_label(args[:label])
-      @value = args[:value].to_s
+      @value = args[:value].to_s.strip
     end
 
     def [] key

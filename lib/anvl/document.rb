@@ -102,7 +102,7 @@ module ANVL
 
     def parse_entry str, line=0
       label, value = str.split ":", 2
-      self.store label, value.strip, true
+      self.store label, value, true
     end
 
     def add_entries_methods
