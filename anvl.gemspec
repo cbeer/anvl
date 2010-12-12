@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{anvl}
-  s.version = "0.1.3"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chris Beer"]
-  s.date = %q{2010-12-09}
+  s.date = %q{2010-12-12}
   s.email = %q{chris@cbeer.info}
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -25,8 +25,13 @@ Gem::Specification.new do |s|
     "VERSION",
     "anvl.gemspec",
     "lib/anvl.rb",
+    "lib/anvl/document.rb",
+    "lib/anvl/element.rb",
+    "lib/anvl/erc.rb",
     "test/helper.rb",
-    "test/test_anvl.rb"
+    "test/test_anvl.rb",
+    "test/test_element.rb",
+    "test/test_erc.rb"
   ]
   s.homepage = %q{http://github.com/cbeer/anvl}
   s.licenses = ["MIT"]
@@ -35,7 +40,9 @@ Gem::Specification.new do |s|
   s.summary = %q{Ruby implementation of A Name-Value Language (ANVL)}
   s.test_files = [
     "test/helper.rb",
-    "test/test_anvl.rb"
+    "test/test_anvl.rb",
+    "test/test_element.rb",
+    "test/test_erc.rb"
   ]
 
   if s.respond_to? :specification_version then
