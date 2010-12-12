@@ -47,8 +47,8 @@ module ANVL
       h = {}
 
       @entries.map do |obj|
-        h[(obj[:display_label] || obj[:label]).to_sym] ||= []
-        h[(obj[:display_label] || obj[:label]).to_sym] << obj[:value] 
+        h[(obj.display_label || obj.label).to_sym] ||= []
+        h[(obj.display_label || obj.label).to_sym] << obj.to_s
       end  
 
       h.each do |label, value|
@@ -108,8 +108,8 @@ module ANVL
     def add_entries_methods
       @entries.reject { |x| self.respond_to? x[:label] }.each do |obj|
         (class << self; self; end).class_eval do
-          define_method obj[:label] do |*args|
-            @entries[obj[:label]]
+          define_method obj.label do |*args|
+            @entries[obj.label]
 	  end 
 	end
       end
