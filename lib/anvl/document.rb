@@ -38,14 +38,7 @@ module ANVL
     def to_s
       gc!
       @entries.map do |obj|
-        case obj[:value]
-          when Array
-            obj[:value].map do |v|
-              "#{obj[:display_label] || obj[:label]}: #{format_value(v)}"
-            end.join "\n"
-          else  
-            "#{obj[:display_label] || obj[:label]}: #{format_value(obj[:value])}"
-        end
+        "#{obj[:display_label] || obj[:label]}: #{format_value(obj[:value])}"
       end.join "\n"
     end
 
