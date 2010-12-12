@@ -76,7 +76,6 @@ who:  Smith, J; Wong, D; Khan, H'
     assert_contains(h[:who], 'Khan, H')
   end
 
-
   def test_intl
     str = 'erc:
 who:    Lederberg, Joshua
@@ -124,5 +123,12 @@ what:, Health and Human Services, United States Government
     assert_contains(h[:who], "Sir Paul McCartney")
     assert_contains(h[:who], "Dr Petra McCartney")
     assert_equal(h[:what], "The United States Government Department of Health and Human Services")
+  end
+
+  def test_value_encoding
+    str = 'erc:
+who: %sp%ex%dq'
+    h = ANVL::Erc.parse str
+    assert_contains(" !\"", h[:who])
   end
 end

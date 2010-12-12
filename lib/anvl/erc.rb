@@ -17,6 +17,7 @@ module ANVL
       def to_s
         str = super
         str &&= format_initial_comma_to_recover_word_order str
+        str &&= decode_element_value_encoding str
         str
       end
 
@@ -48,6 +49,15 @@ module ANVL
         arr.unshift insig
 
         arr.compact.map(&:strip).reject { |x|  x.empty?}.join " "
+      end
+
+      def decode_element_value_encoding str
+        h = { '%sp' => ' ', '%ex' => '!', '%dq' => '"', '%ns' => '#', '%do' => '$', '%pe' => '%', '%am' => '&', '%sq' => '\'', '%op' => '(', '%cp' => ')', '%as' => '*', '%pl' => '+', '%co' => ',', '%sl' => '/', '%cn' => ':', '%sc' => ';', '%lt' => '<', '%eq' => '=', '%gt' => '>', '%qu' => '?', '%at' => '@', '%ox' => '[', '%ls' => '\\', '%cx' => ']', '%vb' => '|', '%nu' => "\0", '%%' => '%' }
+        s = str.dup
+        h.each do |key, value|
+         s.gsub! key, value
+        end
+        s
       end
 
       def convert_label label
