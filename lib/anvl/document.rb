@@ -58,9 +58,9 @@ module ANVL
       h
     end
 
-    def [] display_label
-      label = convert_label display_label
-      v = @entries.select { |x| x[:label] == label }.map { |x| x[:value] }
+    def [] display_label, args = {}
+      v = @entries.select { |x| x =~ display_label }
+      v &&= v.map { |x| x.to_s } unless args[:raw]
       v &&= v.first if v.length == 1
       v
     end
@@ -69,13 +69,13 @@ module ANVL
     def []= display_label, value, append = false
       label = convert_label display_label
       value = [value] unless value.is_a? Array
-      @entries.delete_if { |x| x[:label] == label } unless append
+      @entries.delete_if { |x| x =~ label } unless append
       value.each do |v|
         case v
           when Hash
-            @entries << { :display_label => display_label, :label => label, :value => v }.merge(v)
+            @entries << element_class.new({ :document => self, :label => label, :value => v }.merge(v))
           else
-            @entries << { :display_label => display_label, :label => label, :value => v }
+            @entries << element_class.new({ :document => self, :label => label, :value => v })
         end
       end
     end
@@ -91,7 +91,11 @@ module ANVL
     end
     alias_method :'<<', :push
 
-    private
+    protected
+    def element_class
+      ANVL::Element
+    end
+
     def parse_comment str, line=0
 
     end
@@ -116,16 +120,11 @@ module ANVL
 
     def format_value str = ''
       str = str.to_s
-      str &&= format_initial_comma_to_recover_word_order str
       str &&= str.gsub(/\n/, "\n    ")
     end
 
-    def format_initial_comma_to_recover_word_order str, sort_point = ','
-      return str unless str[0, 1] == sort_point
-      str.split(sort_point).reject { |x| x.empty? }.map(&:split).reverse.join " "
-    end
     def convert_label label
-      label.to_s.downcase.gsub(' ', '_')
+      label.to_s
     end
   end
 end

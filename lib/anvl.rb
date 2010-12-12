@@ -1,3 +1,4 @@
+require 'anvl/element'
 require 'anvl/document'
 module ANVL
   def self.parse *args

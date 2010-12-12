@@ -38,6 +38,7 @@ a: 2'
     assert_equal({:a => 'a' }, h.to_h)
     h[:a] = ['a', 'b']
     assert_equal({:a => ['a', 'b'] }, h.to_h)
+    h[:a].inspect
     h.store :a, 'c', true
     assert_equal({:a => ['a', 'b', 'c'] }, h.to_h)
     assert_equal(['a', 'b', 'c'], h[:a])
@@ -49,10 +50,10 @@ a: 2'
     assert_equal({:a => ['a', 'b', 'c', 'd'] }, h.to_h)
 
     h << { :c => 1 }
-    assert_equal(1, h[:c])
+    assert_equal("1", h[:c])
 
     h << { :c => 2 }
-    assert_equal([1, 2], h[:c])
+    assert_equal(["1", "2"], h[:c])
 
     str = h.to_s
     assert_match(/^a: a$/, str)
@@ -105,13 +106,4 @@ note:   This is an arbitrary note inside a
     assert_equal("Lederberg, Joshua", h[:who])
   end
 
-  def test_initial_comma_to_recover_natural_word_order
-    str = 'who:,  van Gogh, Vincent
-who:,  Howell, III, PhD, 1922-1987, Thurston
-who:,  Acme Rocket Factory, Inc., The
-who:,  Mao Tse Tung'
-    h = ANVL::Document.parse str
-
-
-  end
 end
