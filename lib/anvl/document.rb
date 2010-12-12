@@ -38,7 +38,7 @@ module ANVL
     def to_s
       gc!
       @entries.map do |obj|
-        "#{obj[:display_label] || obj[:label]}: #{format_value(obj[:value])}"
+        obj.to_anvl
       end.join "\n"
     end
 
