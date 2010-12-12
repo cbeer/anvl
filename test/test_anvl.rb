@@ -38,7 +38,7 @@ a: 2'
     assert_equal({:a => 'a' }, h.to_h)
     h[:a] = ['a', 'b']
     assert_equal({:a => ['a', 'b'] }, h.to_h)
-    h[:a] << 'c'
+    h.store :a, 'c', true
     assert_equal({:a => ['a', 'b', 'c'] }, h.to_h)
     assert_equal(['a', 'b', 'c'], h[:a])
 
@@ -76,9 +76,42 @@ a: 2'
   
   def test_fmt_first_draft
     str = ANVL.to_anvl({:entry => [""], :who => ['Gilbert, W.S. | Sullivan, Arthur'], :what => ["The Yeomen of the Guard"], :"when/created" => [1888]})
+    h = ANVL.parse({:entry => [""], :who => ['Gilbert, W.S. | Sullivan, Arthur'], :what => ["The Yeomen of the Guard"], :"when/created" => [1888]})
     assert_match(/entry:/, str)
     assert_match(/who: Gilbert, W.S. | Sullivan, Arthur/, str)
     assert_match(/what: The Yeomen of the Guard/, str)
     assert_match(/when\/created: 1888/, str)
+  end
+
+  def test_display_label
+    h = ANVL::Document.new
+    h['a'] = {:display_label => 'A', :value => '123' }
+    assert_equal("123", h['a'])
+
+    assert_match(/A:/, h.to_s)
+  end
+  
+  def test_str_vs_sym
+    str = 'erc:
+who:    Lederberg, Joshua
+what:   Studies of Human Families for Genetic Linkage
+when:   1974
+where:  http://profiles.nlm.nih.gov/BB/AA/TT/tt.pdf
+note:   This is an arbitrary note inside a
+        small descriptive record.'
+    h = ANVL::Document.parse str
+
+    assert_equal("Lederberg, Joshua", h['who'])
+    assert_equal("Lederberg, Joshua", h[:who])
+  end
+
+  def test_initial_comma_to_recover_natural_word_order
+    str = 'who:,  van Gogh, Vincent
+who:,  Howell, III, PhD, 1922-1987, Thurston
+who:,  Acme Rocket Factory, Inc., The
+who:,  Mao Tse Tung'
+    h = ANVL::Document.parse str
+
+
   end
 end
