@@ -61,8 +61,12 @@ module ANVL
     end
 
     def []= display_label, value, append = false
-      if STORY_TO_OFFSET[display_label] and !value.strip.empty?
+      if value[0,1] != '|' and STORY_TO_OFFSET[display_label] and !value.strip.empty?
         process_abbr_form display_label, value 
+      elsif value[0,1] != ';' and value =~ /;/
+        value.split(';').each do |v|
+          self.store display_label, v, true
+        end
       else
         super
       end

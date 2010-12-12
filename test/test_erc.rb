@@ -47,7 +47,12 @@ where:  http://books.nap.edu/html/digital%5Fdilemma
     str = 'about-erc:   | Bispectrum ; Nonlinearity ; Epilepsy
                    ; Cooperativity ; Subdural ; Hippocampus'
     h = ANVL::Erc.parse str
-    assert_equal('Bispectrum ; Nonlinearity ; Epilepsy ; Cooperativity ; Subdural ; Hippocampus', h['about-what')
+    assert_contains(h['about-what'], 'Bispectrum')
+    assert_contains(h['about-what'], 'Nonlinearity')
+    assert_contains(h['about-what'], 'Epilepsy')
+    assert_contains(h['about-what'], 'Cooperativity')
+    assert_contains(h['about-what'], 'Subdural')
+    assert_contains(h['about-what'], 'Hippocampus')
   end
 
   def test_abbr
@@ -59,6 +64,16 @@ where:  http://books.nap.edu/html/digital%5Fdilemma
     assert_equal("The Decline and Fall of the Roman Empire", h[:what])
     assert_equal("1781", h[:when])
     assert_equal("http://www.ccel.org/g/gibbon/decline/", h[:where])
+  end
+
+  def test_multiple_values
+    str = 'erc:
+who:  Smith, J; Wong, D; Khan, H'
+    h = ANVL::Erc.parse str
+
+    assert_contains(h[:who], 'Smith, J')
+    assert_contains(h[:who], 'Wong, D')
+    assert_contains(h[:who], 'Khan, H')
   end
 
 
