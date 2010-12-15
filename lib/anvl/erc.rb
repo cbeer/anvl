@@ -44,7 +44,7 @@ module ANVL
         end
 
         word = arr.pop
-        arr = [arr.join ","]
+        arr = [arr.join(",")]
         arr.unshift word
         arr.unshift insig
 
